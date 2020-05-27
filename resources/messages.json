@@ -1,0 +1,10 @@
+{
+  "collision": "Collision with earth at %time%s! KABOOM! Thousands of people died on a beach...",
+  "satellite_speed": "Satellite is at %speed% m/s!",
+  "plots_title": "r(t) and θ(t)",
+  "euler_column": "Euler",
+  "odeint_column": "Odeint",
+  "r_graph": "r(t)",
+  "theta_graph": "θ(t)",
+  "frame_name": "Euler and odeint methods comparative"
+}

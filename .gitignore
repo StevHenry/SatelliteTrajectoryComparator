@@ -1,0 +1,4 @@
+.idea
+.floo*
+resources/appLogs.log
+understand_euler.py
