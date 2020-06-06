@@ -1,10 +1,34 @@
 {
-  "collision": "Collision with earth at %time%s! KABOOM! Thousands of people died on a beach...",
-  "satellite_speed": "Satellite is at %speed% m/s!",
-  "plots_title": "r(t) and θ(t)",
-  "euler_column": "Euler",
-  "odeint_column": "Odeint",
-  "r_graph": "r(t)",
-  "theta_graph": "θ(t)",
-  "frame_name": "Euler and odeint methods comparative"
+  "collision": "Collision with earth at {}s! Kaboom il y a eu 3 morts, quel dommage!",
+  "satellite_speed": "Satellite is at {} m/s!",
+  "authors": ["Luca LAFONT-PLAISANT", "Nathan LILAMAND", "Steven HENRY"],
+  "output_format":"pas: {}, facteur: {}, error: {}%, time: {}, collison: {}",
+  "graph": {
+    "parameters": {
+      "initial_speed": "Initial speed: {0} * V0",
+      "euler_step": "Euler step: {1}",
+      "euler_time": "Euler method time: \n{2}ms",
+      "odeint_points": "Odeint points: {3}",
+      "odeint_time": "Odeint method time: \n{4}ms",
+      "fontsize": 10
+    },
+    "plots": {
+      "euler": {
+        "column_name": "Euler",
+        "ray": "Euler ray",
+        "real_ray": "Real ray",
+        "theta": "Euler theta"
+      },
+      "odeint": {
+        "column_name": "Odeint",
+        "ray": "Odeint ray",
+        "real_ray": "Real ray",
+        "theta": "Odeint theta"
+      },
+      "r_graph": "r(t)",
+      "theta_graph": "θ(t)"
+    },
+    "frame_name": "Euler and odeint methods comparative",
+    "title": "r(t) and θ(t)"
+  }
 }

@@ -1,3 +1,4 @@
+from datetime import datetime
 from logging import getLogger
 
 from numpy import cos
@@ -39,7 +40,7 @@ class SatellitePoint:
 
     def to_array(self) -> tuple:
         """ Returns a tuple of the ordered values (t, r(t), r'(t), theta(t), theta'(t)) """
-        return self.t, self.ray, self.ray1, self.theta, self.theta1
+        return (self.t, self.ray, self.ray1, self.theta, self.theta1)
 
     def get_speed(self) -> float:
         """
@@ -51,8 +52,8 @@ class SatellitePoint:
         """ Check wheter the position collides earth. Logs messages if positive"""
         if self.ray <= earth_ray:
             if prints:
-                logger.info(msg["collision"].replace("%time%", str(self.t)))
-                logger.info(msg["satellite_speed"].replace("%speed%", str(self.get_speed())))
+                logger.info(msg["collision"].format(str(self.t)))
+                logger.info(msg["satellite_speed"].format(str(self.get_speed())))
             return True
         return False
 
@@ -80,6 +81,8 @@ class SatelliteMovement:
         self.right_bound = right_bound
         self.euler_step = euler_step
         self.points_count = int((right_bound - self.initial_satellite_point.t) // euler_step)
+        self.euler_calculation_time = 0
+        self.odeint_calculation_time = 0
 
     def next_point_euler(self, previous_point) -> SatellitePoint:
         """Calculates the next approached points.
@@ -119,6 +122,7 @@ class SatelliteMovement:
         """ Updates the points list with euler method """
         # Make sure the list only contains the first SatellitePoint
         self.clean_points_list()
+        start_time = datetime.now()
 
         # Calculate and add to list the new points
         for i in range(self.points_count):
@@ -128,24 +132,26 @@ class SatelliteMovement:
             # Earth collision check
             if new_point.collision_check():
                 break
+        self.euler_calculation_time = (datetime.now() - start_time).microseconds / 10 ** 3
 
     def calculate_points_odeint(self):
         """ Updates the points list with scipy.integrate.odeint method """
         # Make sure the list only contains the first SatellitePoint
         self.clean_points_list()
+        start_time = datetime.now()
 
         # Specific Odeint equation method
-        def equations(elements, time):
+        def equations(elements, time_value):
             ray, ray1, theta, theta1 = elements
-            point = SatellitePoint(time, ray, ray1, theta, theta1)
+            point = SatellitePoint(time_value, ray, ray1, theta, theta1)
             return ray1, self.ray_diff_eq(point), theta1, self.theta_diff_eq(point)
 
         # t values
-        t_list = [self.euler_step * (i + 1) for i in range(self.points_count)]
+        t_list = [self.euler_step * i for i in range(self.points_count + 1)]
 
         # Other values gotten by odeint method
-        ray_list, ray1_list, theta_list, theta1_list = odeint(
-            equations, self.initial_satellite_point.to_array()[1:], t_list).T
+        ray_list, ray1_list, theta_list, theta1_list = \
+            odeint(equations, self.initial_satellite_point.to_array()[1:], t_list).T
 
         # Add points to the points list
         for k in range(len(t_list)):
@@ -155,6 +161,7 @@ class SatelliteMovement:
             # Earth collision check
             if new_point.collision_check():
                 break
+        self.odeint_calculation_time = (datetime.now() - start_time).microseconds / 10 ** 3
 
     def calculate_points_real_solution(self):
         """ Updates the points list with real ray values (Real solution)"""
@@ -165,8 +172,6 @@ class SatelliteMovement:
 
         p = (self.initial_satellite_point.theta1 * self.initial_satellite_point.ray ** 2) ** 2 / alpha
         e = p / self.initial_satellite_point.ray - 1
-        for previous in self.points:
-            new_ray = p / (1 + e * cos(previous.theta))
-            previous.ray = new_ray
-            if previous.collision_check(prints=False):
-                break
+        for point in self.points:
+            new_ray = p / (1 + e * cos(point.theta))
+            point.ray = new_ray

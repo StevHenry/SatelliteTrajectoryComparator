@@ -1,5 +1,6 @@
 # coding: utf-8
 from logging import getLogger
+
 from util import initialize_logger, initialize_messages_config
 
 if __name__ == "__main__":
@@ -12,8 +13,8 @@ if __name__ == "__main__":
     # Messages configuration
     initialize_messages_config()
 
-    import satellite_factory
     # Launch calculations
-    satellite_factory.calculate()
+    import satellite_factory
 
-    getLogger("ChuckNorris").warning("Chuck Norris n'attrape pas le coronavirus, c'est lui qui l'infecte")
+    # satellite_factory.calculate_with_graph()
+    satellite_factory.calculate_without_graph()
