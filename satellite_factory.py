@@ -113,8 +113,8 @@ def calculate_with_graph():
 def calculate_without_graph(euler_path="results/euler.txt", odeint_path="results/odeint.txt"):
     euler_file = open(euler_path, 'w')
     odeint_file = open(odeint_path, 'w')
-    start_time = datetime.now()
-    for h in range(6):
+    start_time = time.time_ns()
+    for h in range(5):
         for k in range(5):
             factor = (0.8 + k / 10)
             angular_speed = factor * v_0 / (earth_ray + altitude)
@@ -152,7 +152,7 @@ def calculate_without_graph(euler_path="results/euler.txt", odeint_path="results
         euler_file.write("\n")
         odeint_file.write("\n")
         logger.debug("Calculation with a step of %0.2f finished", 10 ** (h - 2))
-    final_time = (datetime.now() - start_time).seconds
+    final_time = (time.time_ns() - start_time) / 10 ** 9
     euler_file.write("Total calculation time: {}s".format(final_time))
     odeint_file.write("Total calculation time: {}s".format(final_time))
     euler_file.close()

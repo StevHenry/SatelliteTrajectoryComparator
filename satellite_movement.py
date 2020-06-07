@@ -1,4 +1,4 @@
-from datetime import datetime
+import time
 from logging import getLogger
 
 from numpy import cos
@@ -122,7 +122,7 @@ class SatelliteMovement:
         """ Updates the points list with euler method """
         # Make sure the list only contains the first SatellitePoint
         self.clean_points_list()
-        start_time = datetime.now()
+        start_time = time.time_ns()
 
         # Calculate and add to list the new points
         for i in range(self.points_count):
@@ -132,13 +132,14 @@ class SatelliteMovement:
             # Earth collision check
             if new_point.collision_check():
                 break
-        self.euler_calculation_time = (datetime.now() - start_time).microseconds / 10 ** 3
+        spent_time = time.time_ns() - start_time
+        self.euler_calculation_time = spent_time / 10**6
 
     def calculate_points_odeint(self):
         """ Updates the points list with scipy.integrate.odeint method """
         # Make sure the list only contains the first SatellitePoint
         self.clean_points_list()
-        start_time = datetime.now()
+        start_time = time.time_ns()
 
         # Specific Odeint equation method
         def equations(elements, time_value):
@@ -161,7 +162,8 @@ class SatelliteMovement:
             # Earth collision check
             if new_point.collision_check():
                 break
-        self.odeint_calculation_time = (datetime.now() - start_time).microseconds / 10 ** 3
+        spent_time = time.time_ns() - start_time
+        self.odeint_calculation_time = spent_time / 10**6
 
     def calculate_points_real_solution(self):
         """ Updates the points list with real ray values (Real solution)"""
