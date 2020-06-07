@@ -2,7 +2,7 @@
   "collision": "Collision with earth at {}s! Kaboom il y a eu 3 morts, quel dommage!",
   "satellite_speed": "Satellite is at {} m/s!",
   "authors": ["Luca LAFONT-PLAISANT", "Nathan LILAMAND", "Steven HENRY"],
-  "output_format":"pas: {}, facteur: {}, error: {}%, time: {}, collison: {}",
+  "output_format":"step: {}, factor: {}, error: {}%, time: {}ms, collison: {}",
   "graph": {
     "parameters": {
       "initial_speed": "Initial speed: {0} * V0",
